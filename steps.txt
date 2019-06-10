@@ -1,0 +1,37 @@
+
+## Running jupyterhub locally in a conda environment
+1. Make local python enviroment and activate it
+	conda create -n codehub-dockerspwaner(env name) 
+2. Check jupyterhub, jupyter-notebook and nbgrader are installed or not
+3. Add jupyterhub_config.py file to add configurations that fits our requirements
+4. Add dummyAuthenticator for authentication
+	pip install jupyterhub-dummyauthenticator
+5. Create a docker network to communicate all the containers with eachother 
+	docker create network codehub-dockerspwaner(docker network name)
+6. Add dockerspawner for spawning notebook servers in different containers
+	pip install dockerspawner
+7. Test jupyter-notebook, run command
+	jupyter-notebook(it should start a notebook server)
+8. Test jupyterhub, run command
+	jupyterhub(it should use PAM authenticator and localspwaner
+
+
+## Running jupyterhub in docker using dockerspawner
+1. Create a dockerfile and add dummyauthenticator and dockerspawner
+	#### Dockerfile ####
+	#Install jupyterhub , dummy-authenticator and dockerspawner
+	FROM jupyterhub/jupyterhub:0.9.2
+
+	RUN pip install dockerspawner && pip install jupyterhub-dummyauthenticator 
+2. Create a jupyterhub_config.py and add the following
+	#jupyterhub_config.py
+
+3. Create a docker network to communicate all the containers with eachother 
+	docker create network jupyterhub(docker network name)
+4. Build the dockerfile as docker-codehub:v6 
+5. Now run the jupyterhub using command,
+	docker run -p 8000:8000 -v /home/manshi/docker-workspace/working-codehub-prod/codehub-dockerspawner/jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py -v /var/run/docker.sock:/var/run/docker.sock --net jupyterhub --name jupyterhub docker-codehub:v6 
+
+
+
+
